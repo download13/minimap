@@ -1,0 +1,22 @@
+{
+  "name": "minimap-webapp",
+  "version": "0.0.0",
+  "description": "A minimap web app for smartphones",
+  "main": "server.js",
+  "dependencies": {
+    "file-mw": "^0.0.4",
+    "hogan.js": "^3.0.2",
+    "http-router-fn": "^0.0.1",
+    "mw-compose": "^0.0.0",
+    "sw-send": "0.0.0",
+    "uuid-v4": "^0.1.0",
+    "ws": "^0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha",
+    "start": "node --harmony server.js"
+  },
+  "author": "Erin Dachtler <download333@gmail.com>",
+  "license": "WTFPL"
+}

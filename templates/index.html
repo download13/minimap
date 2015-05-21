@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Minimap</title>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	{{#canonicalUrl}}<link rel="canonical" href="{{canonicalUrl}}">{{/canonicalUrl}}
+
+	<script src="/js/helpers/name-generator.js"></script>
+
+	<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+
+		height: 100%;
+	}
+
+	body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#createminimap {
+		display: block;
+
+		min-width: 50px;
+		min-height: 50px;
+
+		max-width: 40%;
+		max-height: 40%;
+
+		width: 30%;
+		height: 30%;
+	}
+	</style>
+</head>
+<body>
+	<button id="createminimap">Create Minimap</button>
+
+	<script>
+	var createminimap = document.getElementById('createminimap');
+
+	createminimap.addEventListener('click', function() {
+		var roomname = createRandomName();
+
+		location.assign('/m/' + roomname);
+	});
+	</script>
+</body>
+</html>

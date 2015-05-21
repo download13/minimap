@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Minimap - {{roomname}}</title>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	{{#canonicalUrl}}<link rel="canonical" href="${canonicalUrl}">{{/canonicalUrl}}
+
+	<link rel="stylesheet" href="/css/qrcode.css">
+	<link rel="stylesheet" href="/css/icontray.css">
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcx5HivCgxE-sk-zOppJmMTix1lMlAzuI"></script>
+
+	<script src="/js/helpers/qrcode.min.js"></script>
+	<script src="/js/helpers/emitter.js"></script>
+	<script src="/js/helpers/model.js"></script>
+	<script src="/js/views/iconbutton.js"></script>
+	<script src="/js/views/icontray.js"></script>
+	<script src="/js/views/qrbutton.js"></script>
+	<script src="/js/views/qrcode.js"></script>
+	<script src="/js/views/trackbutton.js"></script>
+	<script src="/js/views/minimap.js"></script>
+	<script src="/js/models/profile.js"></script>
+	<script src="/js/models/minimap.js"></script>
+	<script src="/js/models/stateroom.js"></script>
+	<script src="/js/presenters/minimap.js"></script>
+
+	<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+
+		height: 100%;
+	}
+
+	#map {
+		width: 100%;
+		height: 100%;
+	}
+	</style>
+</head>
+<body>
+	<div id="map"></div>
+
+	<script src="/js/app.js"></script>
+</body>
+</html>
