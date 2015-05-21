@@ -1,5 +1,8 @@
 // var DEATH_STAR_POSITION = {lat: 38.5430268, lng: -121.7479138};
 
+var roomname = location.pathname.split('/').pop();
+
+
 var qrCodeView = new QRCodeView();
 
 var iconTrayView = new IconTrayView();
@@ -11,7 +14,7 @@ var profileModel = new ProfileModel();
 
 var minimapModel = new MinimapModel();
 
-var stateRoomModel = new StateRoomModel('ws://' + location.hostname + location.pathname);
+var stateRoomModel = new StateRoomModel('ws://' + location.host + '/ws/' + roomname);
 
 
 new MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, stateRoomModel, profileModel);
