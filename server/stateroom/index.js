@@ -1,6 +1,4 @@
-var uuidv4 = require('uuid-v4');
-
-var EventEmitter = require('events').EventEmitter;
+var Member = require('./member');
 
 
 var CMD_ADD_CLIENT = 0;
@@ -11,11 +9,9 @@ var CMD_CLEAR = 4;
 var CMD_SET_ID = 5; // Only sent from server to client
 
 /*
-StateRoom is a machine that acts like a chat room
-
-Each member:
-Has an id and state map
-May part from the room
+StateRoom acts like a chatroom, but stores state about each member.
+The state is kept synchronized by clients only making requests to change state.
+Their state only changes once the server validates the request and sends an update command down to all clients.
 */
 function StateRoom() {
 	this.members = new Map();
@@ -100,46 +96,6 @@ StateRoom.prototype.handleMemberCmd = function(memberFrom, cmd, args) {
 			member.sendCmd(memberFrom.id, cmd, args);
 		});
 	}
-};
-
-
-function Member(client) {
-	EventEmitter.call(this);
-
-	this.id = uuidv4();
-
-	this.state = new Map();
-
-	this.client = client;
-
-	var self = this;
-	client.on('message', msg => {
-		try {
-			msg = JSON.parse(msg);
-		} catch(e) {}
-
-		if(Array.isArray(msg)) {
-			self.emit('cmd', msg[0], msg[1]);
-		}
-	});
-}
-
-Member.prototype = Object.create(EventEmitter.prototype);
-
-Member.prototype.set = function(key, value) {
-	this.state.set(key, value);
-};
-
-Member.prototype.delete = function(key) {
-	this.state.delete(key);
-};
-
-Member.prototype.clear = function() {
-	this.state.clear();
-};
-
-Member.prototype.sendCmd = function(from, cmd, args) {
-	this.client.send(JSON.stringify([from, cmd, args]));
 };
 
 
