@@ -27,7 +27,6 @@ function MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, s
 
 	// Open the icon selector
 	minimapView.on('iconButtonClicked', function() {
-		console.log('is');
 		iconTrayView.show();
 	});
 
@@ -46,24 +45,25 @@ function MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, s
 
 	// When we move, update our position in the model
 	minimapModel.on('localCoords', function(latlng) {
-		stateRoomModel.set('p', latlng);
+		stateRoomModel.set('p', JSON.stringify(latlng));
 	});
 
 	// When a member leaves, remove their marker on the map
 	stateRoomModel.on('part', function(id) {
-		console.log('part');
 		minimapView.removeMarker(id);
 	});
 
-	stateRoomModel.on('set', function(key, value, memberId) {
+	stateRoomModel.on('set', function(memberId, key, value) {
 		// When a member's position is updated, show it on the minimap
-		if(key === 'p') {
-			minimapView.setMarkerPosition(memberId, value);
+		if(key === 'p') { // Position
+			var position = JSON.parse(value);
+
+			minimapView.setMarkerPosition(memberId, position);
 
 			if(stateRoomModel.id === memberId && minimapModel.trackingSelf) {
-				minimapView.panTo(value);
+				minimapView.panTo(position);
 			}
-		} else if(key === 'i') {
+		} else if(key === 'i') { // Icon
 			minimapView.setMarkerIcon(memberId, value);
 		}
 	});

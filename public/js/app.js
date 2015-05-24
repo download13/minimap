@@ -1,5 +1,3 @@
-// var DEATH_STAR_POSITION = {lat: 38.5430268, lng: -121.7479138};
-
 var roomname = location.pathname.split('/').pop();
 
 
@@ -14,7 +12,8 @@ var profileModel = new ProfileModel();
 
 var minimapModel = new MinimapModel();
 
-var stateRoomModel = new StateRoomModel('ws://' + location.host + '/ws/' + roomname);
+// TODO: Use a durable websocket standin
+var stateRoomModel = new StateRoom(new WebSocket('ws://' + location.host + '/ws/' + roomname));
 
 
 new MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, stateRoomModel, profileModel);

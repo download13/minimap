@@ -8,13 +8,16 @@
     "hogan.js": "^3.0.2",
     "http-router-fn": "^0.0.1",
     "mw-compose": "^0.0.0",
+    "stateroom": "0.0.4",
     "sw-send": "0.0.0",
-    "uuid-v4": "^0.1.0",
     "ws": "^0.7.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "uglify-js": "^2.4.23"
+  },
   "scripts": {
     "test": "mocha",
+    "prestart": "node build.js",
     "start": "node --harmony server"
   },
   "author": "Erin Dachtler <download333@gmail.com>",
