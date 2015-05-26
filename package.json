@@ -8,7 +8,7 @@
     "hogan.js": "^3.0.2",
     "http-router-fn": "^0.0.1",
     "mw-compose": "^0.0.0",
-    "stateroom": "0.0.4",
+    "stateroom": "0.0.5",
     "sw-send": "0.0.0",
     "ws": "^0.7.2"
   },
