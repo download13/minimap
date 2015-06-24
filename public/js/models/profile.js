@@ -52,6 +52,7 @@
 
 		asModel(this);
 
+		// Update localStorage with value changes
 		this.on('iconUrl', function(iconUrl) {
 			localStorage.iconUrl = iconUrl;
 		});
@@ -59,7 +60,7 @@
 		if(this._getIconStorage()) {
 			this.iconUrl = this._getIconStorage();
 		} else {
-			this._setRandomIcon();
+			this._ensureIcon();
 		}
 	}
 
@@ -67,10 +68,14 @@
 		return iconUrls;
 	};
 
-	ProfileModel.prototype._setRandomIcon = function() {
-		var iconIndex = Math.floor(Math.random() * iconUrls.length);
+	ProfileModel.prototype._ensureIcon = function() {
+		if(this._getIconStorage()) {
+			this.iconUrl = this._getIconStorage();
+		} else {
+			var iconIndex = Math.floor(Math.random() * iconUrls.length);
 
-		this.iconUrl = iconUrls[iconIndex];
+			this.iconUrl = iconUrls[iconIndex];
+		}
 	};
 
 	ProfileModel.prototype._getIconStorage = function() {

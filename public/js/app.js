@@ -13,7 +13,9 @@ var profileModel = new ProfileModel();
 var minimapModel = new MinimapModel();
 
 // TODO: Use a durable websocket standin
-var stateRoomModel = new StateRoom(new WebSocket('ws://' + location.host + '/ws/' + roomname));
+var ws = new WebSocket('ws://' + location.host + '/ws/' + roomname);
+
+var stateRoomModel = new StateRoom(ws);
 
 
 new MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, stateRoomModel, profileModel);
