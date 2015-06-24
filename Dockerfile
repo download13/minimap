@@ -1,3 +1,3 @@
 FROM node:0.12-onbuild
 
-PORT 80
+EXPOSE 80
