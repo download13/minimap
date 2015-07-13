@@ -68,3 +68,6 @@ function MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, s
 		}
 	});
 }
+
+
+module.exports = MinimapPresenter;

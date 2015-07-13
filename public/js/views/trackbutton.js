@@ -1,3 +1,6 @@
+var asEmitter = require('../helpers/emitter.js');
+
+
 function TrackButtonView() {
 	asEmitter(this);
 
@@ -25,3 +28,6 @@ TrackButtonView.prototype.show = function() {
 TrackButtonView.prototype.hide = function() {
 	this.el.style.display = 'none';
 };
+
+
+module.exports = TrackButtonView;

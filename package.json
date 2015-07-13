@@ -9,7 +9,9 @@
     "http-router-fn": "^0.0.1",
     "mw-compose": "^0.0.0",
     "stateroom": "0.0.5",
+    "sw-redirect": "0.0.0",
     "sw-send": "0.0.0",
+    "word-slug": "0.0.1",
     "ws": "^0.7.2"
   },
   "devDependencies": {
@@ -17,7 +19,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "prestart": "node build.js",
+    "prestart": "webpack -p ./public/js/app.js public/build/minimap.js",
     "start": "node --harmony server"
   },
   "author": "Erin Dachtler <download333@gmail.com>",

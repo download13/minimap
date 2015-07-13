@@ -1,3 +1,6 @@
+var asEmitter = require('../helpers/emitter.js');
+
+
 function QRButtonView() {
 	asEmitter(this);
 
@@ -15,3 +18,6 @@ function QRButtonView() {
 		self.emit('click');
 	});
 }
+
+
+module.exports = QRButtonView;

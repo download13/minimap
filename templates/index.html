@@ -5,48 +5,146 @@
 
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 
-	<link rel="canonical" href="{{canonicalUrl}}">
-
-	<script src="/js/helpers/name-generator.js"></script>
-
 	<style>
-	html, body {
+	html {
 		margin: 0;
 		padding: 0;
 
-		height: 100%;
+		font-family: Arial, sans-serif;
 	}
 
 	body {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		margin: 0;
+		padding: 0;
 	}
 
-	#createminimap {
+	header {
+		margin: 20px 0 40px 0;
+		text-align: center;
+	}
+
+	header > h1 {
+		margin: 10px;
+		font-size: 3rem;
+	}
+
+	header > img {
+		width: 200px;
+	}
+
+	.townfestimg {
+		width: 100px;
+		float: left;
+		margin-right: 30px;
+	}
+
+	.phonemapimg {
+		width: 100px;
+		float: right;
+		margin-left: 30px;
+	}
+
+	main {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 0 10px 20px 10px;
+		font-size: 1.5rem;
+	}
+
+	.createminimap {
+		clear: both;
 		display: block;
+		text-align: center;
+		font-size: 2.5rem;
+		color: gray;
+	}
 
-		min-width: 50px;
-		min-height: 50px;
+	footer {
+		margin: 20px 0;
+		text-align: center;
+	}
 
-		max-width: 40%;
-		max-height: 40%;
+	.iconcredits {
+		text-align: center;
+		background-color: #eee;
+		display: none;
+		width: 200px;
+		position: fixed;
+		top: 20px;
+		left: calc(50% - 100px);
+		z-index: 100;
+		padding: 10px;
+		box-sizing: border-box;
+	}
 
-		width: 30%;
-		height: 30%;
+	.iconcredits.show {
+		display: block;
+	}
+
+	.iconcredits > img {
+		width: 100px;
+	}
+
+	.iconcredits__bg {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+	}
+
+	.iconcredits__bg.show {
+		display: block;
 	}
 	</style>
 </head>
 <body>
-	<button id="createminimap">Create Minimap</button>
+	<header>
+		<img src="/images/minimap.svg">
+		<h1>minimap</h1>
+	</header>
+
+	<main>
+		<img class="townfestimg" src="/images/townfest.svg">
+		<p>Going places is fun, but getting separated and lost isn't.</p>
+		<p>Texting and calling can help you find someone, but it's inconvenient and hard to coordinate.</p>
+		<img class="phonemapimg" src="/images/phonemap.svg">
+		<p>Why not use all the features of your phone to find people?</p>
+
+		<a class="createminimap" href="/randomroom">Create Minimap</a>
+	</main>
+
+	<footer>
+		<a class="iconcredits__link" href="#">Show Icon Credits</a>
+	</footer>
+
+	<div class="iconcredits">
+		<h2>Icons from Noun Project</h2>
+
+		<img src="/images/minimap.svg">
+		<p>by Michelle Ann</p>
+
+		<img src="/images/phonemap.svg">
+		<p>by Aha-Soft</p>
+	</div>
+	<div class="iconcredits__bg"></div>
 
 	<script>
-	var createminimap = document.getElementById('createminimap');
+	var bg = document.querySelector('.iconcredits__bg');
+	var holder = document.querySelector('.iconcredits');
 
-	createminimap.addEventListener('click', function() {
-		var roomname = createRandomName();
+	document.querySelector('.iconcredits__link').addEventListener('click', function(e) {
+		e.preventDefault();
 
-		location.assign('/m/' + roomname);
+		bg.classList.add('show');
+		holder.classList.add('show');
+	});
+
+	bg.addEventListener('click', function(e) {
+		bg.classList.remove('show');
+		holder.classList.remove('show');
 	});
 	</script>
 </body>

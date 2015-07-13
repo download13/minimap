@@ -1,3 +1,18 @@
+var QRCodeView = require('./views/qrcode.js');
+
+var IconTrayView = require('./views/icontray.js');
+
+var MinimapView = require('./views/minimap.js');
+
+var ProfileModel = require('./models/profile.js');
+
+var MinimapModel = require('./models/minimap.js');
+
+var StateRoom = require('./models/stateroom.js');
+
+var MinimapPresenter = require('./presenters/minimap.js');
+
+
 var roomname = location.pathname.split('/').pop();
 
 

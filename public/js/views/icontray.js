@@ -1,3 +1,6 @@
+var asEmitter = require('../helpers/emitter.js');
+
+
 function IconTrayView() {
 	asEmitter(this);
 
@@ -55,3 +58,6 @@ IconTrayView.prototype.setCurrent = function(url) {
 
 	this._currentImg.classList.add('selected');
 };
+
+
+module.exports = IconTrayView;

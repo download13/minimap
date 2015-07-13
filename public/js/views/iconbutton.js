@@ -1,3 +1,6 @@
+var asEmitter = require('../helpers/emitter.js');
+
+
 function IconButtonView() {
 	asEmitter(this);
 
@@ -15,3 +18,6 @@ function IconButtonView() {
 		self.emit('click');
 	});
 }
+
+
+module.exports = IconButtonView;

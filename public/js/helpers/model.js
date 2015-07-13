@@ -1,3 +1,6 @@
+var asEmitter = require('../helpers/emitter.js');
+
+
 function asModel(model) {
 	asEmitter(model);
 
@@ -30,3 +33,6 @@ function asModel(model) {
 		});
 	};
 }
+
+
+module.exports = asModel;

@@ -47,3 +47,6 @@ function asEmitter(obj) {
 		return this;
 	}
 }
+
+
+module.exports = asEmitter;

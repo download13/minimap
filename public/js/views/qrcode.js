@@ -1,3 +1,6 @@
+var QRCode = require('../helpers/qrcode.min.js');
+
+
 function QRCodeView() {
 	var el = this.el = document.createElement('div');
 
@@ -23,3 +26,6 @@ QRCodeView.prototype.show = function(url) {
 QRCodeView.prototype.hide = function() {
 	this.el.classList.remove('showing');
 };
+
+
+module.exports = QRCodeView;

@@ -1,89 +1,96 @@
-(function() {
-	var DEFAULT_MARKER_POSITION = {lat: 38.152369, lng: -129.458013};
+var asEmitter = require('../helpers/emitter.js');
+
+var TrackButtonView = require('./trackbutton.js');
+
+var QRButtonView = require('./qrbutton.js');
+
+var IconButtonView = require('./iconbutton.js');
 
 
-	function MinimapView(elementId, defaultPosition) {
-		asEmitter(this);
+var DEFAULT_MARKER_POSITION = {lat: 38.152369, lng: -129.458013};
 
-		this._trackButtonView = new TrackButtonView();
 
-		this._qrButtonView = new QRButtonView();
+function MinimapView(elementId, defaultPosition) {
+	asEmitter(this);
 
-		this._iconButtonView = new IconButtonView();
+	this._trackButtonView = new TrackButtonView();
 
-		this._map = new google.maps.Map(document.getElementById(elementId), {
-			zoom: 20,
-			center: defaultPosition,
-			disableDefaultUI: true,
-			// TODO Can we enable the scale control but set a min-max?
-			mapTypeControl: true
-		});
+	this._qrButtonView = new QRButtonView();
 
-		this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._iconButtonView.el);
-		this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._qrButtonView.el);
-		this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._trackButtonView.el);
+	this._iconButtonView = new IconButtonView();
 
-		this._markers = {};
+	this._map = new google.maps.Map(document.getElementById(elementId), {
+		zoom: 20,
+		center: defaultPosition,
+		disableDefaultUI: true,
+		// TODO Can we enable the scale control but set a min-max?
+		mapTypeControl: true
+	});
 
-		var self = this;
+	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._iconButtonView.el);
+	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._qrButtonView.el);
+	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._trackButtonView.el);
 
-		this._iconButtonView.on('click', function() {
-			self.emit('iconButtonClicked');
-		});
+	this._markers = {};
 
-		this._qrButtonView.on('click', function() {
-			self.emit('qrButtonClicked');
-		});
+	var self = this;
 
-		this._trackButtonView.on('click', function() {
-			self.emit('trackButtonClicked');
-		});
+	this._iconButtonView.on('click', function() {
+		self.emit('iconButtonClicked');
+	});
 
-		google.maps.event.addListener(this._map, 'drag', function() {
-			self.emit('usermove');
+	this._qrButtonView.on('click', function() {
+		self.emit('qrButtonClicked');
+	});
+
+	this._trackButtonView.on('click', function() {
+		self.emit('trackButtonClicked');
+	});
+
+	google.maps.event.addListener(this._map, 'drag', function() {
+		self.emit('usermove');
+	});
+}
+
+MinimapView.prototype.hideTrackButton = function() {
+	this._trackButtonView.hide();
+};
+
+MinimapView.prototype.showTrackButton = function() {
+	this._trackButtonView.show();
+};
+
+MinimapView.prototype.ensureMarker = function(id, position) {
+	if(!this._markers[id]) {
+		this._markers[id] = new google.maps.Marker({
+			position: position,
+			map: this._map,
+			title: id
 		});
 	}
+};
 
-	MinimapView.prototype.hideTrackButton = function() {
-		this._trackButtonView.hide();
-	};
+MinimapView.prototype.setMarkerPosition = function(id, position) {
+	this.ensureMarker(id, position);
 
-	MinimapView.prototype.showTrackButton = function() {
-		this._trackButtonView.show();
-	};
+	this._markers[id].setPosition(position);
+};
 
-	MinimapView.prototype.ensureMarker = function(id, position) {
-		if(!this._markers[id]) {
-			this._markers[id] = new google.maps.Marker({
-				position: position,
-				map: this._map,
-				title: id
-			});
-		}
-	};
+MinimapView.prototype.setMarkerIcon = function(id, iconUrl) {
+	this.ensureMarker(id, DEFAULT_MARKER_POSITION);
 
-	MinimapView.prototype.setMarkerPosition = function(id, position) {
-		this.ensureMarker(id, position);
+	this._markers[id].setIcon(iconUrl);
+};
 
-		this._markers[id].setPosition(position);
-	};
+MinimapView.prototype.removeMarker = function(id) {
+	this._markers[id].setMap(null);
 
-	MinimapView.prototype.setMarkerIcon = function(id, iconUrl) {
-		this.ensureMarker(id, DEFAULT_MARKER_POSITION);
+	delete this._markers[id];
+};
 
-		this._markers[id].setIcon(iconUrl);
-	};
-
-	MinimapView.prototype.removeMarker = function(id) {
-		this._markers[id].setMap(null);
-
-		delete this._markers[id];
-	};
-
-	MinimapView.prototype.panTo = function(coords) {
-		this._map.panTo(coords);
-	};
+MinimapView.prototype.panTo = function(coords) {
+	this._map.panTo(coords);
+};
 
 
-	window.MinimapView = MinimapView;
-})();
+module.exports = MinimapView;

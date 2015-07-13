@@ -1,3 +1,6 @@
+var asModel = require('../helpers/model.js');
+
+
 function MinimapModel() {
 	this.localCoords = null;
 
@@ -24,3 +27,6 @@ function MinimapModel() {
 		maximumAge: 0
 	});
 }
+
+
+module.exports = MinimapModel;
