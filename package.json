@@ -5,6 +5,7 @@
   "main": "server/index.js",
   "dependencies": {
     "file-mw": "^0.0.4",
+    "flux": "^2.0.3",
     "hogan.js": "^3.0.2",
     "http-router-fn": "^0.0.1",
     "mw-compose": "^0.0.0",
