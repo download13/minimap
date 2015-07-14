@@ -13,7 +13,7 @@ function IconButtonView(dispatcher) {
 	el.innerHTML = '<img title="Change Marker" alt="Map marker icon" src="/images/marker.png">';
 
 	dom.on(el, 'click', function() {
-		dispatcher.dispatch('icon-tray', 'open');
+		dispatcher.dispatch({type: 'icon-tray', status: 'open'});
 	});
 }
 
