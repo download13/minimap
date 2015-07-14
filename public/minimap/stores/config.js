@@ -49,7 +49,7 @@ var iconUrls = [
 ].map(function(name) {return '/icons/' + name + '.png'});
 
 
-function ProfileStore(dispatcher) {
+function ConfigStore(dispatcher) {
 	var self = this;
 
 	asEmitter(self);
@@ -58,16 +58,16 @@ function ProfileStore(dispatcher) {
 
 	dispatcher.register(function(payload) {
 		if(payload.type === 'icon-selected') {
-			self._setIconUrl(payload.iconUrl);
+			self._setSelfIconUrl(payload.iconUrl);
 		}
 	});
 }
 
-ProfileStore.prototype.getAllIconUrls = function() {
+ConfigStore.prototype.getAllIconUrls = function() {
 	return iconUrls;
 };
 
-ProfileStore.prototype._initstate = function() {
+ConfigStore.prototype._initstate = function() {
 	if(!this.getIconUrl()) {
 		var iconIndex = Math.floor(Math.random() * iconUrls.length);
 
@@ -75,15 +75,15 @@ ProfileStore.prototype._initstate = function() {
 	}
 };
 
-ProfileStore.prototype.getIconUrl = function() {
-	return localStorage.iconUrl;
+ConfigStore.prototype.getSelfIconUrl = function() {
+	return localStorage.selfIconUrl;
 };
 
-ProfileStore.prototype._setIconUrl = function(iconUrl) {
-	localStorage.iconUrl = iconUrl;
+ConfigStore.prototype._setSelfIconUrl = function(selfIconUrl) {
+	localStorage.selfIconUrl = selfIconUrl;
 
-	this.emit('change');
+	this.emit('icon-url', selfIconUrl);
 };
 
 
-module.exports = ProfileStore;
+module.exports = ConfigStore;
