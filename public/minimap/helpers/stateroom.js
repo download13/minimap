@@ -49,6 +49,10 @@ function StateRoomClient(ws) {
 	};
 }
 
+StateRoomClient.prototype.get = function(key, memberId) {
+	return this._members[memberId][key];
+};
+
 StateRoomClient.prototype.set = function(key, value) {
 	var valueType = typeof value;
 

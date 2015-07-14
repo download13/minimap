@@ -1,14 +1,18 @@
+var Dispatcher = require('flux').Dispatcher;
+
 var QRCodeView = require('./components/qrcode');
 
 var IconTrayView = require('./components/icontray');
 
 var MinimapView = require('./components/minimap');
 
-var ProfileModel = require('./models/profile');
+var ConfigStore = require('./stores/config');
 
 var MinimapModel = require('./models/minimap');
 
-var StateRoom = require('./models/stateroom');
+var UIStore = require('./stores/ui');
+
+var RoomStore = require('./stores/room');
 
 var MinimapPresenter = require('./presenters/minimap');
 
@@ -16,27 +20,28 @@ var MinimapPresenter = require('./presenters/minimap');
 var roomname = location.pathname.split('/').pop();
 
 
-var qrCodeView = new QRCodeView();
-
-var iconTrayView = new IconTrayView();
-
-var minimapView = new MinimapView('map');
-
-
-var profileModel = new ProfileModel();
-
-var minimapModel = new MinimapModel();
+var dispatcher = new Dispatcher();
 
 // TODO: Use a durable websocket standin
-var ws = new WebSocket('ws://' + location.host + '/ws/' + roomname);
+var ws = new WebSocket(websocketUrl);
 
-var stateRoomModel = new StateRoom(ws);
-
-
-new MinimapPresenter(minimapView, iconTrayView, qrCodeView, minimapModel, stateRoomModel, profileModel);
+var stateroom = new StateRoom(ws);
 
 
-// TODO
-// When you first use the app, create a random profile icon for the user
-// Add some icons to the site
-// Use them as markers
+
+// Stores
+var configStore = new ConfigStore(dispatcher);
+
+var uiStore = new UIStore(dispatcher);
+
+var locationStore = new LocationStore(stateroom);
+
+var roomStore = new RoomStore(dispatcher, 'ws://' + location.host + '/ws/' + roomname, stateroom);
+
+
+// Components
+new QRCodeView(uiStore);
+
+new IconTrayView(dispatcher, configStore, uiStore);
+
+new MinimapView(dispatcher, 'map', uiStore, roomStore);

@@ -6,6 +6,7 @@ function UIStore(dispatcher) {
 
 	asEmitter(self);
 
+	self.trackingSelf = true;
 
 	dispatcher.register(function(payload) {
 		switch(payload.type) {
@@ -18,6 +19,7 @@ function UIStore(dispatcher) {
 			break;
 
 		case 'tracking-self':
+			self.trackingSelf = payload.tracking;
 			self.emit('tracking-self', payload.tracking);
 		}
 	});

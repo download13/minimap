@@ -5,7 +5,9 @@ var QRButtonView = require('./qrbutton.js');
 var IconButtonView = require('./iconbutton.js');
 
 
-function MinimapView(dispatcher, elementId, uiStore) {
+function MinimapView(dispatcher, elementId, uiStore, roomStore) {
+	var self = this;
+
 	var trackButton = new TrackButtonView(dispatcher, uiStore);
 
 	var qrButton = new QRButtonView(dispatcher);
@@ -30,39 +32,36 @@ function MinimapView(dispatcher, elementId, uiStore) {
 	google.maps.event.addListener(map, 'drag', function() {
 		dispatcher.dispatch({type: 'tracking-self', tracking: false});
 	});
+
+	roomStore.on('remove', function(id) {
+		self._markers[id].setMap(null);
+
+		delete self._markers[id];
+	});
+
+	roomStore.on('user-position', function(latlng, memberId, isSelf) {
+		if(!self._markers[memberId]) {
+			self._markers[memberId] = new google.maps.Marker({
+				position: latlng,
+				map: map,
+				title: memberId,
+				icon: roomStore.getMemberIcon(memberId)
+			});
+		}
+
+		self._markers[id].setPosition(position);
+
+		if(isSelf && uiStore.trackingSelf) {
+			map.panTo(position);
+		}
+	});
+
+	roomStore.on('user-icon', function(iconUrl, memberId) {
+		if(self._markers[memberId]) {
+			self._markers[memberId].setIcon(iconUrl);
+		}
+	});
 }
-
-MinimapView.prototype.ensureMarker = function(id, position) {
-	if(!this._markers[id]) {
-		this._markers[id] = new google.maps.Marker({
-			position: position,
-			map: this._map,
-			title: id
-		});
-	}
-};
-
-MinimapView.prototype.setMarkerPosition = function(id, position) {
-	this.ensureMarker(id, position);
-
-	this._markers[id].setPosition(position);
-};
-
-MinimapView.prototype.setMarkerIcon = function(id, iconUrl) {
-	this.ensureMarker(id, DEFAULT_MARKER_POSITION);
-
-	this._markers[id].setIcon(iconUrl);
-};
-
-MinimapView.prototype.removeMarker = function(id) {
-	this._markers[id].setMap(null);
-
-	delete this._markers[id];
-};
-
-MinimapView.prototype.panTo = function(coords) {
-	this._map.panTo(coords);
-};
 
 
 module.exports = MinimapView;
