@@ -1,10 +1,8 @@
 var asEmitter = require('../helpers/emitter.js');
 
 
-function IconButtonView() {
-	asEmitter(this);
-
-	var el = this.el = document.createElement('button');
+function IconButtonView(dispatcher) {
+	var el = document.createElement('button');
 
 	el.style.display = 'block';
 	el.style.minWidth = '50px';
@@ -12,10 +10,8 @@ function IconButtonView() {
 
 	el.innerHTML = '<img title="Change Marker" alt="Map marker icon" src="/images/marker.png">';
 
-	var self = this;
-
 	el.addEventListener('click', function() {
-		self.emit('click');
+		dispatcher.dispatch('open-icon-tray');
 	});
 }
 

@@ -1,16 +1,16 @@
-var QRCodeView = require('./views/qrcode.js');
+var QRCodeView = require('./components/qrcode');
 
-var IconTrayView = require('./views/icontray.js');
+var IconTrayView = require('./components/icontray');
 
-var MinimapView = require('./views/minimap.js');
+var MinimapView = require('./components/minimap');
 
-var ProfileModel = require('./models/profile.js');
+var ProfileModel = require('./models/profile');
 
-var MinimapModel = require('./models/minimap.js');
+var MinimapModel = require('./models/minimap');
 
-var StateRoom = require('./models/stateroom.js');
+var StateRoom = require('./models/stateroom');
 
-var MinimapPresenter = require('./presenters/minimap.js');
+var MinimapPresenter = require('./presenters/minimap');
 
 
 var roomname = location.pathname.split('/').pop();
