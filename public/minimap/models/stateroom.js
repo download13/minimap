@@ -1,11 +1,12 @@
 var asEmitter = require('../helpers/emitter.js');
 
 
+// TODO: Break this out into a synchronized map primitive
+
 var CMD_ADD_CLIENT = 0;
 var CMD_REMOVE_CLIENT = 1;
 var CMD_SET = 2;
 var CMD_DELETE = 3;
-var CMD_CLEAR = 4;
 
 
 function StateRoomClient(ws) {
@@ -105,10 +106,8 @@ StateRoomClient.prototype._handleCmd = function(fromId, cmd, args) {
 			this._deleteProperty(fromId, args);
 			break;
 
-		case CMD_CLEAR:
-			this._members[fromId] = Object.create(null);
-
-			this.emit('clear', fromId);
+		default:
+			throw new Error('Unknown message type recieved: ' + cmd);
 		}
 	} else { // Room command
 		switch(cmd) {
