@@ -7,28 +7,18 @@ function UIStore(dispatcher) {
 	asEmitter(self);
 
 
-	self.iconTrayOpen = false;
-
-	self.qrTrayOpen = false;
-
-	self.trackingUser = true;
-
-
 	dispatcher.register(function(payload) {
 		switch(payload.type) {
 		case 'icon-tray':
-			self.iconTrayOpen = payload.open;
-			self.emit('change');
+			self.emit('icon-tray', payload.open);
 			break;
 
 		case 'qr-tray':
-			self.qrTrayOpen = payload.open;
-			self.emit('change');
+			self.emit('qr-tray', payload.open, payload.url);
 			break;
 
-		case 'track-user':
-			self.trackingUser = payload.tracking;
-			self.emit('change');
+		case 'tracking-self':
+			self.emit('tracking-self', payload.tracking);
 		}
 	});
 }

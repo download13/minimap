@@ -1,17 +1,8 @@
-var asEmitter = require('../helpers/emitter');
-
-
-function LocationStore(initialLatLng) {
-	var self = this;
-
-	asEmitter(self);
-
-	self.latlng = initialLatLng || {lat: 0, lng: 0};
-
+function LocationStore(stateroom) {
 	navigator.geolocation.watchPosition(function(pos) {
-		self.latlng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+		var latlng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
 
-		self.emit('change');
+		stateroom.set('p', JSON.stringify(latlng));
 	}, function(err) {
 		if(err.PERMISSION_DENIED) {
 			alert('You must allow the app to see your location or it won\'t work');
