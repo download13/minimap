@@ -40,7 +40,7 @@ IconTrayView.prototype.setIcons = function(urlList) {
 		dom.on(img, 'click', function() {
 			self.hide();
 
-			self._dispatcher.dispatch('icon-selected', url);
+			self._dispatcher.dispatch({type: 'icon-selected', iconUrl: url});
 		});
 
 		self._imgs[url] = img;
