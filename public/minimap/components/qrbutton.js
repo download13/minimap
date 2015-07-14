@@ -1,21 +1,19 @@
-var asEmitter = require('../helpers/emitter.js');
+var dom = require('../helpers/dom');
 
 
-function QRButtonView() {
-	asEmitter(this);
+function QRButtonView(dispatcher) {
+	var el = dom.create('button');
 
-	var el = this.el = document.createElement('button');
-
-	el.style.display = 'block';
-	el.style.minWidth = '50px';
-	el.style.minHeight = '50px';
+	dom.css(el, {
+		display: 'block',
+		width: '50px',
+		height: '50px'
+	});
 
 	el.innerHTML = '<img title="QR Link" alt="QR code icon" src="/images/qrcode.png">';
 
-	var self = this;
-
-	el.addEventListener('click', function() {
-		self.emit('click');
+	dom.on(el, 'click', function() {
+		dispatcher.dispatch('qr-code', 'open');
 	});
 }
 

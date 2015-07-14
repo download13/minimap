@@ -1,23 +1,14 @@
-var asEmitter = require('../helpers/emitter.js');
-
-
-function TrackButtonView() {
-	asEmitter(this);
-
+function TrackButtonView(dispatcher) {
 	var el = this.el = document.createElement('button');
 
-	el.style.display = 'block';
-	el.style.minWidth = '50px';
-	el.style.minHeight = '50px';
+	el.style.display = 'none';
+	el.style.width = '50px';
+	el.style.height = '50px';
 
 	el.innerHTML = '<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">';
 
-	this.hide();
-
-	var self = this;
-
 	el.addEventListener('click', function() {
-		self.emit('click');
+		dispatcher.dispatch({type: 'track-marker', status: true});
 	});
 }
 
