@@ -7,27 +7,36 @@ var createModalTray = require('../modal-tray');
 
 
 // TODO: Get this working with dispatcher instead
-function IconTrayView(dispatcher) {
-	var tray = this.tray = createModalTray();
+function IconTrayView(dispatcher, configStore, uiStore) {
+	var self = this;
+
+	var tray = self.tray = createModalTray();
 
 	dom.addClass(tray.holder, 'icontray');
 
-	this._imgs = {};
+	self._imgs = {};
 
-	this._currentImg = null;
+	self._currentImg = null;
 
-	this._dispatcher = dispatcher;
+	self._dispatcher = dispatcher;
+
+
+	self._setIcons(configStore.getAllIconUrls());
+
+	configStore.on('self-icon', function(iconUrl) {
+		self._setCurrentIcon(iconUrl);
+	});
+
+	uiStore.on('icon-tray', function(open) {
+		if(open) {
+			this.tray.show();
+		} else {
+			this.tray.hide();
+		}
+	});
 }
 
-IconTrayView.prototype.show = function() {
-	this.tray.show();
-};
-
-IconTrayView.prototype.hide = function() {
-	this.tray.hide();
-};
-
-IconTrayView.prototype.setIcons = function(urlList) {
+IconTrayView.prototype._setIcons = function(urlList) {
 	var self = this;
 
 	dom.remove(self.tray.holder);
@@ -51,7 +60,7 @@ IconTrayView.prototype.setIcons = function(urlList) {
 	dom.append(self.tray.holder, iconEls);
 };
 
-IconTrayView.prototype.setCurrent = function(url) {
+IconTrayView.prototype._setCurrentIcon = function(url) {
 	if(this._currentImg) {
 		dom.removeClass(this._currentImg, 'selected');
 	}

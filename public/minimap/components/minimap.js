@@ -1,5 +1,3 @@
-var asEmitter = require('../helpers/emitter.js');
-
 var TrackButtonView = require('./trackbutton.js');
 
 var QRButtonView = require('./qrbutton.js');
@@ -7,58 +5,32 @@ var QRButtonView = require('./qrbutton.js');
 var IconButtonView = require('./iconbutton.js');
 
 
-var DEFAULT_MARKER_POSITION = {lat: 38.152369, lng: -129.458013};
+function MinimapView(dispatcher, elementId, uiStore) {
+	var trackButton = new TrackButtonView(dispatcher, uiStore);
 
+	var qrButton = new QRButtonView(dispatcher);
 
-function MinimapView(elementId, defaultPosition) {
-	asEmitter(this);
+	var iconButton = new IconButtonView(dispatcher);
 
-	this._trackButtonView = new TrackButtonView();
-
-	this._qrButtonView = new QRButtonView();
-
-	this._iconButtonView = new IconButtonView();
-
-	this._map = new google.maps.Map(document.getElementById(elementId), {
+	var map = this._map = new google.maps.Map(document.getElementById(elementId), {
 		zoom: 20,
-		center: defaultPosition,
+		center: {lat: 0, lng: 0},
 		disableDefaultUI: true,
 		// TODO Can we enable the scale control but set a min-max?
 		mapTypeControl: true
 	});
 
-	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._iconButtonView.el);
-	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._qrButtonView.el);
-	this._map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this._trackButtonView.el);
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(iconButton.el);
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(qrButton.el);
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(trackButton.el);
 
 	this._markers = {};
 
-	var self = this;
 
-	this._iconButtonView.on('click', function() {
-		self.emit('iconButtonClicked');
-	});
-
-	this._qrButtonView.on('click', function() {
-		self.emit('qrButtonClicked');
-	});
-
-	this._trackButtonView.on('click', function() {
-		self.emit('trackButtonClicked');
-	});
-
-	google.maps.event.addListener(this._map, 'drag', function() {
-		self.emit('usermove');
+	google.maps.event.addListener(map, 'drag', function() {
+		dispatcher.dispatch({type: 'tracking-self', tracking: false});
 	});
 }
-
-MinimapView.prototype.hideTrackButton = function() {
-	this._trackButtonView.hide();
-};
-
-MinimapView.prototype.showTrackButton = function() {
-	this._trackButtonView.show();
-};
 
 MinimapView.prototype.ensureMarker = function(id, position) {
 	if(!this._markers[id]) {

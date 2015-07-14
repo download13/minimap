@@ -1,5 +1,5 @@
-function TrackButtonView(dispatcher) {
-	var el = this.el = document.createElement('button');
+function TrackButtonView(dispatcher, uiStore) {
+	var el = document.createElement('button');
 
 	el.style.display = 'none';
 	el.style.width = '50px';
@@ -8,17 +8,17 @@ function TrackButtonView(dispatcher) {
 	el.innerHTML = '<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">';
 
 	el.addEventListener('click', function() {
-		dispatcher.dispatch({type: 'track-marker', status: true});
+		dispatcher.dispatch({type: 'tracking-self', tracking: true});
+	});
+
+	uiStore.on('tracking-self', function(tracking) {
+		if(tracking) {
+			el.style.display = 'none';
+		} else {
+			el.style.display = 'block';
+		}
 	});
 }
-
-TrackButtonView.prototype.show = function() {
-	this.el.style.display = 'block';
-};
-
-TrackButtonView.prototype.hide = function() {
-	this.el.style.display = 'none';
-};
 
 
 module.exports = TrackButtonView;

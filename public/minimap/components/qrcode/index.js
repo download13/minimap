@@ -8,29 +8,30 @@ var dom = require('../../helpers/dom');
 var createModalTray = require('../modal-tray');
 
 
-function QRCodeView() {
+function QRCodeView(uiStore) {
 	var self = this;
 
 	var tray = self.tray = createModalTray();
 
 	dom.addClass(tray.holder, 'qrcode');
 
-	self.qrcode = new QRCode(tray.holder);
+	var qrcode = new QRCode(tray.holder);
+
 
 	dom.on(tray.holder, 'click', function() {
 		self.hide();
 	});
+
+	uiStore.on('qr-tray', function(open, url) {
+		if(open) {
+			qrcode.makeCode(url);
+
+			tray.show();
+		} else {
+			tray.hide();
+		}
+	});
 }
-
-QRCodeView.prototype.show = function(url) {
-	this.qrcode.makeCode(url);
-
-	this.tray.show();
-};
-
-QRCodeView.prototype.hide = function() {
-	this.tray.hide();
-};
 
 
 module.exports = QRCodeView;

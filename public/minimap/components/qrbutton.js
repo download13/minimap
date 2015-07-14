@@ -13,7 +13,7 @@ function QRButtonView(dispatcher) {
 	el.innerHTML = '<img title="QR Link" alt="QR code icon" src="/images/qrcode.png">';
 
 	dom.on(el, 'click', function() {
-		dispatcher.dispatch({type: 'qr-code', status: 'open'});
+		dispatcher.dispatch({type: 'qr-tray', open: true});
 	});
 }
 
