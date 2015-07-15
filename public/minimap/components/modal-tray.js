@@ -1,16 +1,14 @@
-var dom = require('../helpers/dom');
+var $ = require('../helpers/sprint');
 
 
 module.exports = function() {
-	var holder = dom.create('div');
-
-	dom.css(holder, {
+	var holder = $('<div>')
+	.css({
 		display: 'inline'
 	});
 
-	var backdrop = dom.create('div');
-
-	dom.css(backdrop, {
+	var backdrop = $('<div>')
+	.css({
 		display: 'none',
 		background: 'rgba(0, 0, 0, 0.25)',
 		position: 'fixed',
@@ -20,26 +18,23 @@ module.exports = function() {
 		height: '100%',
 		justifyContent: 'center',
 		alignItems: 'center'
-	});
-
-	dom.on(backdrop, 'click', hide);
-
-
-	backdrop.appendChild(holder);
-	document.body.appendChild(backdrop);
+	})
+	.on('click', hide)
+	.append(holder)
+	.appendTo(document.body);
 
 
 	function show() {
-		dom.css(backdrop, {display: 'flex'});
+		backdrop.css({display: 'flex'});
 	}
 
 	function hide() {
-		dom.css(backdrop, {display: 'none'});
+		backdrop.css({display: 'none'});
 	}
 
 
 	return {
-		holder: holder,
+		holder: holder.get(0),
 		show: show,
 		hide: hide
 	};

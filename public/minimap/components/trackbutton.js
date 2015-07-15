@@ -1,21 +1,23 @@
+var $ = require('../helpers/sprint');
+
+
 function TrackButtonView(dispatcher, uiStore) {
-	var el = document.createElement('button');
-
-	el.style.display = 'none';
-	el.style.width = '50px';
-	el.style.height = '50px';
-
-	el.innerHTML = '<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">';
-
-	el.addEventListener('click', function() {
+	var el = $('<button>')
+	.css({
+		display: 'none',
+		width: '50px',
+		height: '50px'
+	})
+	.html('<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">')
+	.on('click', function() {
 		dispatcher.dispatch({type: 'tracking-self', tracking: true});
 	});
 
 	uiStore.on('tracking-self', function(tracking) {
 		if(tracking) {
-			el.style.display = 'none';
+			el.css({display: 'none'});
 		} else {
-			el.style.display = 'block';
+			el.css({display: 'block'});
 		}
 	});
 }

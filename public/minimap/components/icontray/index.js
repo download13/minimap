@@ -1,7 +1,7 @@
 require('./style.css');
 
 
-var dom = require('../../helpers/dom');
+var $ = require('../../helpers/sprint');
 
 var createModalTray = require('../modal-tray');
 
@@ -12,7 +12,7 @@ function IconTrayView(dispatcher, configStore, uiStore) {
 
 	var tray = self.tray = createModalTray();
 
-	dom.addClass(tray.holder, 'icontray');
+	$(tray.holder).addClass('icontray');
 
 	self._imgs = {};
 
@@ -29,9 +29,9 @@ function IconTrayView(dispatcher, configStore, uiStore) {
 
 	uiStore.on('icon-tray', function(open) {
 		if(open) {
-			this.tray.show();
+			self.tray.show();
 		} else {
-			this.tray.hide();
+			self.tray.hide();
 		}
 	});
 }
@@ -39,14 +39,16 @@ function IconTrayView(dispatcher, configStore, uiStore) {
 IconTrayView.prototype._setIcons = function(urlList) {
 	var self = this;
 
-	dom.remove(self.tray.holder);
+	var holder = $(self.tray.holder);
+
+	holder.children().remove();
 
 	self._imgs = {};
 
 	var iconEls = urlList.map(function(url) {
-		var img = dom.create('img', {src: url});
-
-		dom.on(img, 'click', function() {
+		var img = $('<img>')
+		.attr({src: url})
+		.on('click', function() {
 			self.hide();
 
 			self._dispatcher.dispatch({type: 'icon-selected', iconUrl: url});
@@ -57,17 +59,17 @@ IconTrayView.prototype._setIcons = function(urlList) {
 		return img;
 	});
 
-	dom.append(self.tray.holder, iconEls);
+	holder.append(iconEls);
 };
 
 IconTrayView.prototype._setCurrentIcon = function(url) {
 	if(this._currentImg) {
-		dom.removeClass(this._currentImg, 'selected');
+		$(this._currentImg).removeClass('selected');
 	}
 
 	this._currentImg = this._imgs[url];
 
-	dom.addClass(this._currentImg, 'selected');
+	$(this._currentImg).addClass('selected');
 };
 
 

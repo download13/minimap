@@ -1,18 +1,15 @@
-var dom = require('../helpers/dom');
+var $ = require('../helpers/sprint');
 
 
 function QRButtonView(dispatcher) {
-	var el = dom.create('button');
-
-	dom.css(el, {
+	var el = $('<button>')
+	.css({
 		display: 'block',
 		width: '50px',
 		height: '50px'
-	});
-
-	el.innerHTML = '<img title="QR Link" alt="QR code icon" src="/images/qrcode.png">';
-
-	dom.on(el, 'click', function() {
+	})
+	.html('<img title="QR Link" alt="QR code icon" src="/images/qrcode.png">')
+	.on('click', function() {
 		dispatcher.dispatch({type: 'qr-tray', open: true});
 	});
 }

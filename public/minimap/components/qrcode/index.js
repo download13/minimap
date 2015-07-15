@@ -3,24 +3,21 @@ require('./style.css');
 
 var QRCode = require('../../helpers/qrcode.min.js');
 
-var dom = require('../../helpers/dom');
+var $ = require('../../helpers/sprint');
 
 var createModalTray = require('../modal-tray');
 
 
 function QRCodeView(uiStore) {
-	var self = this;
+	var tray = createModalTray();
 
-	var tray = self.tray = createModalTray();
-
-	dom.addClass(tray.holder, 'qrcode');
+	$(tray.holder)
+	.addClass('qrcode')
+	.on('click', function() {
+		tray.hide();
+	});
 
 	var qrcode = new QRCode(tray.holder);
-
-
-	dom.on(tray.holder, 'click', function() {
-		self.hide();
-	});
 
 	uiStore.on('qr-tray', function(open, url) {
 		if(open) {
