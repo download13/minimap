@@ -1,3 +1,5 @@
+var StateRoom = require('./helpers/stateroom');
+
 var Dispatcher = require('flux').Dispatcher;
 
 var QRCodeView = require('./components/qrcode');
@@ -8,13 +10,11 @@ var MinimapView = require('./components/minimap');
 
 var ConfigStore = require('./stores/config');
 
-var MinimapModel = require('./models/minimap');
-
 var UIStore = require('./stores/ui');
 
-var RoomStore = require('./stores/room');
+var LocationStore = require('./stores/location');
 
-var MinimapPresenter = require('./presenters/minimap');
+var RoomStore = require('./stores/room');
 
 
 var roomname = location.pathname.split('/').pop();
@@ -23,7 +23,7 @@ var roomname = location.pathname.split('/').pop();
 var dispatcher = new Dispatcher();
 
 // TODO: Use a durable websocket standin
-var ws = new WebSocket(websocketUrl);
+var ws = new WebSocket('ws://' + location.host + '/ws/' + roomname);
 
 var stateroom = new StateRoom(ws);
 
@@ -36,7 +36,7 @@ var uiStore = new UIStore(dispatcher);
 
 var locationStore = new LocationStore(stateroom);
 
-var roomStore = new RoomStore(dispatcher, 'ws://' + location.host + '/ws/' + roomname, stateroom);
+var roomStore = new RoomStore(dispatcher, stateroom);
 
 
 // Components

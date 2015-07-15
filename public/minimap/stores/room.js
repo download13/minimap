@@ -3,10 +3,12 @@ var asEmitter = require('../helpers/emitter');
 var StateRoom = require('../helpers/stateroom');
 
 
-function RoomStore(dispatcher, websocketUrl, stateroom) {
+function RoomStore(dispatcher, stateroom) {
 	var self = this;
 
 	asEmitter(self);
+
+	self.stateroom = stateroom;
 
 
 	stateroom.on('set', function(memberId, key, value) {
@@ -26,5 +28,8 @@ function RoomStore(dispatcher, websocketUrl, stateroom) {
 }
 
 RoomStore.prototype.getMemberIcon = function(id) {
-	return stateroom.get('i', id);
+	return this.stateroom.get('i', id);
 };
+
+
+module.exports = RoomStore;

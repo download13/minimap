@@ -68,10 +68,10 @@ ConfigStore.prototype.getAllIconUrls = function() {
 };
 
 ConfigStore.prototype._initstate = function() {
-	if(!this.getIconUrl()) {
+	if(!this.getSelfIconUrl()) {
 		var iconIndex = Math.floor(Math.random() * iconUrls.length);
 
-		this._setIconUrl(iconUrls[iconIndex]);
+		this._setSelfIconUrl(iconUrls[iconIndex]);
 	}
 };
 

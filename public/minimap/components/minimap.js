@@ -49,10 +49,10 @@ function MinimapView(dispatcher, elementId, uiStore, roomStore) {
 			});
 		}
 
-		self._markers[id].setPosition(position);
+		self._markers[memberId].setPosition(latlng);
 
 		if(isSelf && uiStore.trackingSelf) {
-			map.panTo(position);
+			map.panTo(latlng);
 		}
 	});
 
