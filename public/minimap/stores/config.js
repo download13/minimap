@@ -1,4 +1,8 @@
-var asEmitter = require('../helpers/emitter');
+var dispatcher = require('../main').dispatcher;
+
+var stateroom = require('../main').stateroom;
+
+var asStore = require('../helpers/store');
 
 
 var iconUrls = [
@@ -49,41 +53,41 @@ var iconUrls = [
 ].map(function(name) {return '/icons/' + name + '.png'});
 
 
-function ConfigStore(dispatcher) {
-	var self = this;
+var configStore = asStore({
+	getSelfIconUrl: function() {
+		return localStorage.selfIconUrl;
+	},
+	availableIconUrls: iconUrls
+});
 
-	asEmitter(self);
 
-	self._initstate();
+// Initialize
+if(!configStore.getSelfIconUrl()) {
+	var iconIndex = Math.floor(Math.random() * iconUrls.length);
 
-	dispatcher.register(function(payload) {
-		if(payload.type === 'icon-selected') {
-			self._setSelfIconUrl(payload.iconUrl);
-		}
-	});
+	setSelfIconUrlByIndex(iconIndex);
 }
 
-ConfigStore.prototype.getAllIconUrls = function() {
-	return iconUrls;
-};
+stateroom.set('i', configStore.getSelfIconUrl());
 
-ConfigStore.prototype._initstate = function() {
-	if(!this.getSelfIconUrl()) {
-		var iconIndex = Math.floor(Math.random() * iconUrls.length);
-
-		this._setSelfIconUrl(iconUrls[iconIndex]);
+dispatcher.register(function(payload) {
+	if(payload.type === 'icon-selected') {
+		setSelfIconUrl(payload.url);
 	}
-};
-
-ConfigStore.prototype.getSelfIconUrl = function() {
-	return localStorage.selfIconUrl;
-};
-
-ConfigStore.prototype._setSelfIconUrl = function(selfIconUrl) {
-	localStorage.selfIconUrl = selfIconUrl;
-
-	this.emit('icon-url', selfIconUrl);
-};
+});
 
 
-module.exports = ConfigStore;
+function setSelfIconUrl(url) {
+	localStorage.selfIconUrl = url;
+
+	stateroom.set('i', url);
+
+	configStore.emitChange();
+}
+
+function setSelfIconUrlByIndex(index) {
+	setSelfIconUrl(iconUrls[iconIndex]);
+}
+
+
+module.exports = configStore;
