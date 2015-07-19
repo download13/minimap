@@ -1,3 +1,11 @@
+var dispatch = require('../dispatcher').dispatch;
+
+var trackingSelfAction = require('../actions/tracking-self');
+
+var usersStore = require('../stores/users');
+
+var mapStore = require('../stores/map');
+
 var TrackButtonView = require('./trackbutton.js');
 
 var QRButtonView = require('./qrbutton.js');
@@ -5,16 +13,16 @@ var QRButtonView = require('./qrbutton.js');
 var IconButtonView = require('./iconbutton.js');
 
 
-function MinimapView(dispatcher, elementId, uiStore, roomStore) {
-	var self = this;
+function MinimapView(elementId) {
+	var trackButton = new TrackButtonView();
 
-	var trackButton = new TrackButtonView(dispatcher, uiStore);
+	var qrButton = new QRButtonView();
 
-	var qrButton = new QRButtonView(dispatcher);
+	var iconButton = new IconButtonView();
 
-	var iconButton = new IconButtonView(dispatcher);
+	var mapElement = document.getElementById(elementId);
 
-	var map = this._map = new google.maps.Map(document.getElementById(elementId), {
+	var map = new google.maps.Map(mapElement, {
 		zoom: 20,
 		center: {lat: 0, lng: 0},
 		disableDefaultUI: true,
@@ -26,39 +34,48 @@ function MinimapView(dispatcher, elementId, uiStore, roomStore) {
 	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(qrButton.el);
 	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(trackButton.el);
 
-	this._markers = {};
 
-
+	// Whenever the map is manually moved stop tracking our marker
 	google.maps.event.addListener(map, 'drag', function() {
-		dispatcher.dispatch({type: 'tracking-self', tracking: false});
+		dispatch(trackingSelfAction(false));
 	});
 
-	roomStore.on('remove', function(id) {
-		self._markers[id].setMap(null);
 
-		delete self._markers[id];
-	});
+	// Keep the map markers in sync with the users in our room
+	var selfMarker = null;
 
-	roomStore.on('user-position', function(latlng, memberId, isSelf) {
-		if(!self._markers[memberId]) {
-			self._markers[memberId] = new google.maps.Marker({
-				position: latlng,
-				map: map,
-				title: memberId,
-				icon: roomStore.getMemberIcon(memberId)
-			});
+	var markers = {};
+
+	usersStore.onChange(function(user) { // Add
+		var marker = markers[user.id] = new google.maps.Marker({
+			position: user.position,
+			map: map,
+			title: user.id,
+			icon: user.iconUrl
+		});
+
+		if(user.isSelf) {
+			selfMarker = marker;
 		}
 
-		self._markers[memberId].setPosition(latlng);
+		user.onChange(function() {
+			marker.setPosition(user.position);
 
-		if(isSelf && uiStore.trackingSelf) {
-			map.panTo(latlng);
-		}
+			if(user.isSelf && mapStore.trackingSelf) {
+				map.panTo(user.position);
+			}
+
+			marker.setIcon(user.iconUrl);
+		});
+	}, function(user) { // Remove
+		markers[user.id].setMap(null);
+
+		delete markers[user.id];
 	});
 
-	roomStore.on('user-icon', function(iconUrl, memberId) {
-		if(self._markers[memberId]) {
-			self._markers[memberId].setIcon(iconUrl);
+	mapStore.onChange(function() {
+		if(mapStore.trackingSelf && selfMarker) {
+			map.panTo(selfMarker.getPosition());
 		}
 	});
 }

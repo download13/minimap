@@ -1,37 +1,50 @@
 require('./style.css');
 
 
+var dispatch = require('../../dispatcher').dispatch;
+
+var iconSelectedAction = require('../../actions/self-icon-selected');
+
+var iconTrayAction = require('../../actions/icon-tray');
+
+var iconTrayStore = require('../../stores/icon-selection-tray');
+
 var $ = require('../../helpers/sprint');
 
 var createModalTray = require('../modal-tray');
 
 
-// TODO: Get this working with dispatcher instead
-function IconTrayView(dispatcher, configStore, uiStore) {
+function IconTrayView() {
 	var self = this;
 
-	var tray = self.tray = createModalTray();
+	var tray = self.tray = createModalTray()
+	.on('backdrop-click', function() {
+		dispatch(iconTrayAction(false));
+	});
 
-	$(tray.holder).addClass('icontray');
+	$(tray.holder)
+	.addClass('icontray')
+	.on('click', function(e) {
+		e.stopPropagation();
+	});
 
 	self._imgs = {};
 
 	self._currentImg = null;
 
-	self._dispatcher = dispatcher;
 
+	self._setIcons(iconTrayStore.availableIconUrls);
 
-	self._setIcons(configStore.getAllIconUrls());
+	// TODO: Add a listener to the modal-tray and find out when it's been clicked, then emit a close action
 
-	configStore.on('self-icon', function(iconUrl) {
-		self._setCurrentIcon(iconUrl);
-	});
+	iconTrayStore.onChange(function(value, key) {
+		switch(key) {
+		case 'open':
+			self.tray.setOpen(value);
+			break;
 
-	uiStore.on('icon-tray', function(open) {
-		if(open) {
-			self.tray.show();
-		} else {
-			self.tray.hide();
+		case 'selectedIconUrl':
+			self._setCurrentIcon(value);
 		}
 	});
 }
@@ -45,32 +58,36 @@ IconTrayView.prototype._setIcons = function(urlList) {
 
 	self._imgs = {};
 
-	var iconEls = urlList.map(function(url) {
-		var img = $('<img>')
-		.attr({src: url})
-		.on('click', function() {
-			self.hide();
+	var iconElements = urlList.map(function(url) {
+		return self._imgs[url] =
+			$('<img>')
+			.attr({src: url})
+			.on('click', function(e) {
+				dispatch(iconSelectedAction(url));
 
-			self._dispatcher.dispatch({type: 'icon-selected', iconUrl: url});
-		});
-
-		self._imgs[url] = img;
-
-		return img;
+				// Looks nicer with a slight delay before closing
+				setTimeout(function() {
+					dispatch(iconTrayAction(false));
+				}, 50);
+			});
 	});
 
-	holder.append(iconEls);
+	holder.append(iconElements);
 };
 
 IconTrayView.prototype._setCurrentIcon = function(url) {
-	if(this._currentImg) {
-		$(this._currentImg).removeClass('selected');
+	var currentImage = this._currentImg;
+
+	if(currentImage) {
+		currentImage.removeClass('selected');
 	}
 
-	this._currentImg = this._imgs[url];
+	this._currentImg = currentImage = this._imgs[url];
 
-	$(this._currentImg).addClass('selected');
+	currentImage.addClass('selected');
 };
 
 
-module.exports = IconTrayView;
+module.exports = function() {
+	return new IconTrayView();
+};

@@ -1,4 +1,4 @@
-var stateroom = require('../main').stateroom;
+var stateroom = require('./stateroom');
 
 
 var latlng = {lat: 0, lng: 0};

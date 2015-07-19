@@ -25,8 +25,14 @@ module.exports = function(a) {
 			throw new Error('Same add callback registered twice: ' + addFn);
 		}
 
+		addHandlers.push(addFn);
+
 		if(removeHandlers.indexOf(removeFn) !== -1) {
 			throw new Error('Same remove callback registered twice: ' + removeFn);
+		}
+
+		if(removeFn) {
+			removeHandlers.push(removeFn);
 		}
 
 		// Initialize
@@ -64,6 +70,8 @@ module.exports = function(a) {
 	};
 
 	a.forEach = each.bind(null, items);
+
+	return a;
 };
 
 

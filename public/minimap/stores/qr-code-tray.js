@@ -1,4 +1,6 @@
-var dispatcher = require('../main').dispatcher;
+var dispatcher = require('../dispatcher');
+
+var QR_TRAY_ACTION = require('../actions/qr-tray').type;
 
 var asStore = require('../helpers/store');
 
@@ -9,16 +11,14 @@ var qrCodeTray = asStore({
 });
 
 
-dispatcher.register(function(payload) {
-	if(payload.type === 'qr-tray') {
-		qrCodeTray.open = payload.open;
+dispatcher.register(QR_TRAY_ACTION, function(payload) {
+	qrCodeTray.open = payload.open;
 
-		if(payload.url) {
-			qrCodeTray.displayedUrl = payload.url;
-		}
-
-		qrCodeTray.emitChange();
+	if(payload.url) {
+		qrCodeTray.displayedUrl = payload.url;
 	}
+
+	qrCodeTray.emitChange();
 });
 
 

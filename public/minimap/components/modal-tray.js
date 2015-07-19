@@ -1,3 +1,5 @@
+var asEmitter = require('../helpers/emitter');
+
 var $ = require('../helpers/sprint');
 
 
@@ -19,23 +21,19 @@ module.exports = function() {
 		justifyContent: 'center',
 		alignItems: 'center'
 	})
-	.on('click', hide)
+	.on('click', function() {
+		r.emit('backdrop-click');
+	})
 	.append(holder)
 	.appendTo(document.body);
 
 
-	function show() {
-		backdrop.css({display: 'flex'});
-	}
-
-	function hide() {
-		backdrop.css({display: 'none'});
-	}
-
-
-	return {
+	var r = asEmitter({
 		holder: holder.get(0),
-		show: show,
-		hide: hide
-	};
+		setOpen: function(open) {
+			backdrop.css({display: open ? 'flex' : 'none'});
+		}
+	});
+
+	return r;
 };

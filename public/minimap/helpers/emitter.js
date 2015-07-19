@@ -46,6 +46,8 @@ function asEmitter(obj) {
 
 		return this;
 	}
+
+	return obj;
 }
 
 

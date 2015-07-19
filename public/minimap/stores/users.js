@@ -1,19 +1,18 @@
-var stateroom = require('../main').stateroom;
+var stateroom = require('./stateroom');
 
-var createMapStore = require('../helpers/mapstore');
+var asMapStore = require('../helpers/mapstore');
 
 var asStore = require('../helpers/store');
 
 
-var users = createMapStore({
-	getMemberIcon: function(id) {
-		stateroom.get('i', id);
-	}
-});
+var users = asMapStore({});
 
 
 stateroom.on('join', function(memberId) {
-	var user = asStore({id: memberId});
+	var user = asStore({
+		id: memberId,
+		position: {lat: 0, lng: 0}
+	});
 
 	if(memberId === stateroom.id) {
 		user.isSelf = true;

@@ -1,7 +1,11 @@
+var dispatch = require('../dispatcher').dispatch;
+
+var iconTrayAction = require('../actions/icon-tray');
+
 var $ = require('../helpers/sprint');
 
 
-function IconButtonView(dispatcher) {
+function IconButtonView() {
 	var el = $('<button>')
 	.css({
 		display: 'block',
@@ -10,11 +14,7 @@ function IconButtonView(dispatcher) {
 	})
 	.html('<img title="Change Marker" alt="Map marker icon" src="/images/marker.png">')
 	.on('click', function() {
-		dispatcher.dispatch({
-			type: 'icon-tray',
-			open: true,
-			url: location.href
-		});
+		dispatch(iconTrayAction(true));
 	});
 
 	this.el = el.get(0);

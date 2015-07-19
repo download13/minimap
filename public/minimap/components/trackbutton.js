@@ -1,7 +1,13 @@
+var dispatch = require('../dispatcher').dispatch;
+
+var trackingSelfAction = require('../actions/tracking-self');
+
+var mapStore = require('../stores/map');
+
 var $ = require('../helpers/sprint');
 
 
-function TrackButtonView(dispatcher, uiStore) {
+function TrackButtonView() {
 	var el = $('<button>')
 	.css({
 		display: 'none',
@@ -10,16 +16,14 @@ function TrackButtonView(dispatcher, uiStore) {
 	})
 	.html('<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">')
 	.on('click', function() {
-		dispatcher.dispatch({type: 'tracking-self', tracking: true});
+		dispatch(trackingSelfAction(true));
 	});
 
-	uiStore.on('tracking-self', function(tracking) {
-		if(tracking) {
-			el.css({display: 'none'});
-		} else {
-			el.css({display: 'block'});
-		}
+	mapStore.onChange(function() {
+		el.css({display: mapStore.trackingSelf ? 'none' : 'block'});
 	});
+
+	this.el = el.get(0);
 }
 
 
