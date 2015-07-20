@@ -12,7 +12,13 @@ function TrackButtonView() {
 	.css({
 		display: 'none',
 		width: '50px',
-		height: '50px'
+		height: '50px',
+		border: '4px black solid',
+		borderRadius: '25px',
+		background: 'white',
+		padding: '2px 0 0 0',
+		outline: 'none',
+		margin: '8px'
 	})
 	.html('<img title="Track Self" alt="Crosshair icon" src="/images/crosshair.png">')
 	.on('click', function() {

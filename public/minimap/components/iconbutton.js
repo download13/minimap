@@ -10,7 +10,13 @@ function IconButtonView() {
 	.css({
 		display: 'block',
 		width: '50px',
-		height: '50px'
+		height: '50px',
+		border: '4px black solid',
+		borderRadius: '25px',
+		background: 'white',
+		padding: '4px 0 0 0',
+		outline: 'none',
+		margin: '8px'
 	})
 	.html('<img title="Change Marker" alt="Map marker icon" src="/images/marker.png">')
 	.on('click', function() {
