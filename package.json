@@ -1,6 +1,6 @@
 {
   "name": "minimap-webapp",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A minimap web app for smartphones",
   "main": "server/index.js",
   "dependencies": {
