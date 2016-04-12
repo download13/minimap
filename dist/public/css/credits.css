@@ -1,0 +1,34 @@
+.iconcredits {
+	text-align: center;
+	background-color: #eee;
+	display: none;
+	width: 200px;
+	position: fixed;
+	top: 20px;
+	left: calc(50% - 100px);
+	z-index: 100;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.iconcredits.show {
+	display: block;
+}
+
+.iconcredits > img {
+	width: 100px;
+}
+
+.iconcredits__bg {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+}
+
+.iconcredits__bg.show {
+	display: block;
+}

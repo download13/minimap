@@ -1,21 +1,17 @@
-var http = require('http');
+import express from 'express';
+import expressWs from 'express-ws';
+import path from 'path';
+import routes from './routes';
+import wss from './websocket';
 
-var mwCompose = require('mw-compose');
 
+const app = express();
+expressWs(app);
 
-// Composes a middleware stack from handlers
-var app = mwCompose([
-	require('./static-files'),
-	require('./routes'),
-	require('./not-found')
-]);
+app.use(express.static('dist/public'));
 
-var server = http.createServer(app);
-
-// Attach the websocket handler to the server
-require('./websocket')(server);
+wss(app);
+routes(app);
 
 // It's going to be in a Docker container so just listen on 80
-server.listen(80, function() {
-	console.log('Listening on port 80');
-});
+app.listen(80, () => console.log('Listening on port 80'));

@@ -1,41 +1,22 @@
-var fs = require('fs');
-
-var path = require('path');
-
-var send = require('sw-send');
-
-var redirect = require('sw-redirect');
-
-var hogan = require('hogan.js');
-
-var router = require('http-router-fn')();
-
-var fileHandler = require('file-mw').createFileHandler;
-
-var wordSlug = require('word-slug');
+import wordSlug from 'word-slug';
+import qr from 'qr-image';
 
 
-var templatePath = path.resolve(__dirname, '..', 'templates');
+export default router => {
+	router.get('/randomroom', function(req, res) {
+		res.redirect('/m/' + wordSlug(3));
+	});
 
-function loadTemplate(name) {
-	return hogan.compile(fs.readFileSync(path.join(templatePath, name + '.html'), 'utf8'));
+	router.get('/m/:roomname', function(req, res) {
+		res.sendFile('minimap.html', {root: 'dist'});
+	});
+
+	router.get('/qr/:roomname', function(req, res) {
+		const img = qr.image(`${req.protocol}://${req.headers.host}/m/${req.params.roomname}`, {
+			type: 'png',
+			margin: 2
+		});
+		res.type('image/png');
+		img.pipe(res);
+	});
 }
-
-var appTemplate = loadTemplate('app');
-
-// TODO: set cache headers
-router.get('/', fileHandler(__dirname + '/../templates/index.html', {buffer: true}));
-
-router.get('/randomroom', redirect, function(req, res) {
-	res.redirect('/m/' + wordSlug(3));
-});
-
-router.get('/m/:roomname', send, function(req, res) {
-	var roomname = req.params[0];
-
-	res.send(appTemplate.render({roomname: roomname}));
-});
-
-
-module.exports = router;
-

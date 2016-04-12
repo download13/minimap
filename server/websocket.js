@@ -1,62 +1,19 @@
-var WebSocketServer = require('ws').Server;
-
-var StateRoom = require('stateroom');
-
-
-var stateRoomHub = new StateRoomHub();
+import WebSocketClient from 'stateroom/server/clients/websocket';
+import {createRoomManager} from 'stateroom';
 
 
-module.exports = function(server) {
-	var wss = new WebSocketServer({
-		server: server,
-		clientTracking: false
+const rooms = createRoomManager();
+
+export default app => {
+	app.ws('/m/:roomname', (ws, req) => {
+		const {roomname} = req.params;
+		const room = rooms.get(roomname);
+		const client = new WebSocketClient(ws);
+
+		const done = () => room.removeClient(client);
+		ws.on('close', done);
+		ws.on('error', done);
+
+		room.addClient(client);
 	});
-
-	wss.on('connection', function(client) {
-		var roomname = roomnameFromUrl(client.upgradeReq.url);
-
-		if(!roomname) {
-			client.close();
-			return;
-		}
-
-		client.on('close', () => stateRoomHub.part(client, roomname));
-		client.on('error', () => stateRoomHub.part(client, roomname));
-
-		stateRoomHub.join(client, roomname);
-	});
-};
-
-
-function roomnameFromUrl(url) {
-	if(!url) {
-		url = '';
-	}
-
-	return url.split('/').pop();
 }
-
-
-function StateRoomHub() {
-	this.rooms = new Map();
-}
-
-StateRoomHub.prototype.join = function(client, roomname) {
-	var rooms = this.rooms;
-
-	if(!rooms.has(roomname)) {
-		rooms.set(roomname, new StateRoom());
-	}
-
-	rooms.get(roomname).addClient(client);
-};
-
-StateRoomHub.prototype.part = function(client, roomname) {
-	var room = this.rooms.get(roomname);
-
-	room.removeClient(client);
-
-	if(room.isEmpty()) {
-		this.rooms.delete(roomname);
-	}
-};

@@ -1,0 +1,17 @@
+{
+  "name": "Minimap",
+  "short_name": "Minimap",
+  "icons": [{
+        "src": "images/minimap.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      }, {
+        "src": "iamges/minimap.svg",
+        "sizes": "any",
+		"type": "image/svg+xml"
+      }],
+  "scope": "/",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}

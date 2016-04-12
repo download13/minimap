@@ -1,0 +1,125 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+#approot {
+	height: 100%;
+}
+
+
+.controls {
+	background-color: #83A9AD;
+	border-radius: 3px 3px 0 0;
+	position: fixed;
+	bottom: 0;
+	left: 30%;
+	padding: 10px;
+}
+
+.controls__pick-icon, .controls__show-qr, .controls__center-on-me {
+	background-color: #eee;
+	border: 0;
+	border-radius: 3px;
+}
+
+.controls__pick-icon:hover, .controls__show-qr:hover, .controls__center-on-me:hover {
+	background-color: #ddd;
+}
+
+.controls__show-qr, .controls__center-on-me {
+	margin-left: 10px;
+}
+
+.controls__show-qr > img, .controls__center-on-me > img {
+	padding-top: 2.5px;
+	padding-bottom: 2.5px;
+}
+
+
+.qrcode__holder {
+	z-index: -100;
+}
+.qrcode__holder.showing {
+	z-index: 99;
+}
+
+.qrcode__holder > .qrcode__bg {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(70, 70, 70, 0);
+	transition: background-color 150ms;
+	z-index: 100;
+}
+.qrcode__holder.showing > .qrcode__bg {
+	display: block;
+	background-color: rgba(70, 70, 70, 0.5);
+}
+
+.qrcode__holder > .qrcode {
+	position: fixed;
+	bottom: -200px;
+	left: calc(50% - 100px);
+	width: 200px;
+	transition: bottom 150ms;
+	z-index: 101;
+}
+.qrcode__holder.showing > .qrcode {
+	bottom: calc(50% - 100px);
+}
+
+
+.icontray__holder {
+	z-index: -100;
+}
+.icontray__holder.showing {
+	z-index: 99;
+}
+
+.icontray__holder > .icontray__bg {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(70, 70, 70, 0);
+	transition: background-color 150ms;
+	z-index: 100;
+}
+.icontray__holder.showing > .icontray__bg {
+	display: block;
+	background-color: rgba(70, 70, 70, 0.5);
+}
+
+.icontray__holder > .icontray {
+	background-color: #eee;
+	border-radius: 3px;
+	position: fixed;
+	bottom: -400px;
+	left: calc(50% - 110px);
+	width: 200px;
+	padding: 10px;
+	transition: bottom 150ms;
+	text-align: center;
+	overflow-y: auto;
+	z-index: 101;
+}
+.icontray__holder.showing > .icontray {
+	bottom: calc(50% - 100px);
+}
+
+.icontray > .selected {
+	border: 1px black solid;
+}
+
+
+.google-map-widget {
+	width: 100%;
+	height: 100%;
+}
