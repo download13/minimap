@@ -1,0 +1,13 @@
+version: "2"
+services:
+    minimap:
+        build: .
+        restart: always
+        networks:
+            webserver:
+                aliases:
+                    - minimap-server
+
+networks:
+    webserver:
+        external: true
