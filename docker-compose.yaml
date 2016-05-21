@@ -8,7 +8,8 @@ services:
         labels:
             traefik.backend: minimap
             traefik.port: "80"
-            traefik.enabled: "true"
+            traefik.enable: "true"
+            traefik.host: "minimap.erindachtler.me"
 
 networks:
     frontend:
