@@ -7,8 +7,8 @@ services:
             - frontend
         labels:
             traefik.backend: minimap
-            traefik.port: 80
-            traefik.enabled: true
+            traefik.port: "80"
+            traefik.enabled: "true"
 
 networks:
     frontend:
