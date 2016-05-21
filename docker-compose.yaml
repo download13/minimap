@@ -4,10 +4,10 @@ services:
         build: .
         restart: always
         networks:
-            webserver:
-                aliases:
-                    - minimap-server
+            - frontend
+        labels:
+            traefik.backend: minimap
 
 networks:
-    webserver:
+    frontend:
         external: true
