@@ -2,7 +2,7 @@ version: "2"
 services:
     minimap:
         build: .
-        restart: always
+        restart: unless-stopped
         networks:
             - frontend
         labels:
