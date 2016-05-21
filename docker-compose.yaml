@@ -4,13 +4,19 @@ services:
         build: .
         restart: unless-stopped
         networks:
-            - frontend
+            frontend: null
+            webserver:
+                aliases:
+                    - minimap-server
         labels:
             traefik.backend: minimap
             traefik.port: "80"
             traefik.enable: "true"
-            traefik.host: "minimap.erindachtler.me"
+            traefik.host: "minimap"
+            traefik.domain: "erindachtler.me"
 
 networks:
     frontend:
+        external: true
+    webserver:
         external: true
