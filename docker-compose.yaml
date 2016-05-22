@@ -8,6 +8,8 @@ services:
             webserver:
                 aliases:
                     - minimap-server
+        expose:
+            - "80"
         labels:
             traefik.backend: minimap
             traefik.port: "80"
