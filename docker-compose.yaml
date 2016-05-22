@@ -12,10 +12,8 @@ services:
             - "80"
         labels:
             traefik.backend: minimap
-            traefik.port: "80"
-            traefik.enable: "true"
-            traefik.host: "minimap"
-            traefik.domain: "erindachtler.me"
+            traefik.frontend.rule: "Host: minimap.erindachtler.me"
+            # traefik.domain: erindachtler.me
 
 networks:
     frontend:
