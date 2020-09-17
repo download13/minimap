@@ -4,19 +4,12 @@ services:
         build: .
         restart: unless-stopped
         networks:
-            frontend: null
             webserver:
                 aliases:
                     - minimap-server
         expose:
             - "80"
-        labels:
-            traefik.backend: minimap
-            traefik.frontend.rule: "Host: minimap.erindachtler.me"
-            # traefik.domain: erindachtler.me
 
 networks:
-    frontend:
-        external: true
     webserver:
         external: true
